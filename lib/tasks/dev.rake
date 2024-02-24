@@ -9,9 +9,22 @@ task({ :sample_data => :environment }) do
     Photo.destroy_all
     User.destroy_all
   end
+  usernames = Array.new { Faker::Name.first_name }
 
+  usernames << "alice"
+  usernames << "bob"
+
+  usernames.each do |username|
+    User.create(
+      email: "#{username}@example.com",
+      password: "password",
+      username: username.downcase,
+      private: [true, false].sample,
+    )
+  end
+  
   12.times do
-   name = Faker::Name.first_name
+    name = Faker::Name.first_name
     u = User.create(
       email: "#{name}@example.com",
       password: "password",
@@ -32,14 +45,14 @@ task({ :sample_data => :environment }) do
       if rand < 0.75
         first_user.sent_follow_requests.create(
           recipient: second_user,
-          status: FollowRequest.statuses.keys.sample
+          status: FollowRequest.statuses.keys.sample,
         )
       end
 
       if rand < 0.75
         second_user.sent_follow_requests.create(
           recipient: first_user,
-          status: FollowRequest.statuses.keys.sample
+          status: FollowRequest.statuses.keys.sample,
         )
       end
     end
@@ -50,7 +63,7 @@ task({ :sample_data => :environment }) do
     rand(15).times do
       photo = user.own_photos.create(
         caption: Faker::Quote.jack_handey,
-        image: "https://robohash.org/#{rand(9999)}"
+        image: "https://robohash.org/#{rand(9999)}",
       )
 
       user.followers.each do |follower|
@@ -61,7 +74,7 @@ task({ :sample_data => :environment }) do
         if rand < 0.25
           photo.comments.create(
             body: Faker::Quote.jack_handey,
-            author: follower
+            author: follower,
           )
         end
       end
@@ -73,5 +86,4 @@ task({ :sample_data => :environment }) do
   p "There are now #{Photo.count} photos."
   p "There are now #{Like.count} likes."
   p "There are now #{Comment.count} comments."
-
 end
