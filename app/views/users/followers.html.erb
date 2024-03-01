@@ -1,0 +1,7 @@
+<%= render "users/tabs", user: @user %>
+
+<ul class="list-group">
+  <% @followers.each do |follower| %>
+    <%= render "users/user", user: follower %>
+  <% end %>
+</ul>

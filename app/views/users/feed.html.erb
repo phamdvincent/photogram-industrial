@@ -1,0 +1,7 @@
+<%= render "users/tabs", user: @user %>
+
+<ul>
+  <% @feed.each do |post| %>
+    <%= render "photos/photo", photo: post %>
+  <% end %>
+</ul>
